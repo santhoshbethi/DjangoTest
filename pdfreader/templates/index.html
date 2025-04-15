@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF Summarizer</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 30px; max-width: 600px; margin: auto; }
+    select, button { padding: 10px; margin-top: 10px; }
+    #summary { margin-top: 20px; white-space: pre-wrap; background: #f4f4f4; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h2>📄 PDF Summarizer</h2>
+
+  <label for="pdf-select">Choose a PDF file:</label><br>
+  <select id="pdf-select">
+    <option disabled selected>Loading PDFs...</option>
+  </select><br>
+
+  <button onclick="getSummary()">Get Summary</button>
+
+  <div id="summary"></div>
+
+  <script>
+    // Fetch list of PDFs
+    fetch('/api/list-pdfs/')
+      .then(res => res.json())
+      .then(data => {
+        const select = document.getElementById('pdf-select');
+        select.innerHTML = '';  // Clear initial loading option
+        data.files.forEach(file => {
+          const option = document.createElement('option');
+          option.value = file;
+          option.text = file;
+          select.appendChild(option);
+        });
+      });
+
+    function getSummary() {
+      const selectedFile = document.getElementById('pdf-select').value;
+      const summaryDiv = document.getElementById('summary');
+      summaryDiv.innerHTML = '⏳ Summarizing... Please wait.';
+
+      fetch('/api/summarize-pdf/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: selectedFile })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.summary) {
+          summaryDiv.innerHTML = `<h3>📋 Summary:</h3>${data.summary}`;
+        } else if (data.error) {
+          summaryDiv.innerHTML = `<span style="color: red;">❌ ${data.error}</span>`;
+        }
+      })
+      .catch(err => {
+        summaryDiv.innerHTML = `<span style="color: red;">❌ An error occurred.</span>`;
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>

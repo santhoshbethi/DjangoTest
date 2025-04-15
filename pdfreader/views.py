@@ -6,16 +6,21 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 import json
+from django.shortcuts import render
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
-print(settings.OPENAI_API_KEY)
+
+
 @require_GET
 def list_pdfs(request):
+    '''List all PDF files in the assets directory. '''
     files = [f for f in os.listdir(settings.ASSETS_DIR) if f.endswith('.pdf')]
     return JsonResponse({'files': files})
+
 
 @csrf_exempt
 @require_POST
 def summarize_pdf(request):
+    '''Summarize a PDF file using OpenAI API. '''
     data = json.loads(request.body)
     filename = data.get('filename')
 
@@ -48,3 +53,9 @@ def summarize_pdf(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+
+
+def index(request):
+    return render(request, 'index.html')

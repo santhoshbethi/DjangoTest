@@ -3,3 +3,4 @@ pdfreader/migration/__pycache__/*
 pdfreader/*.pyc
 pdfreader/*.pyo
 pdf_summary_project/__pycache__/*
+pdfreader/migrations/__pycache__/*
