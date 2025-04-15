@@ -8,3 +8,9 @@ curl --location 'http://127.0.0.1:8000/api/summarize-pdf/' \
 --data '{
   "filename": "any_pdf_name_here.pdf"
 }'
+
+
+OR
+
+
+open this in chrome http://localhost:8000/api/ 
