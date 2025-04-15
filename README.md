@@ -14,3 +14,15 @@ OR
 
 
 open this in chrome http://localhost:8000/api/ 
+
+
+
+
+copy
+pdfreader and assets(it has sample pdfs) folder completely 
+copy .env, Dockerfile, requirements.txt,.gitignore and assets
+ add below url in your main project urls.
+  path('api/', include('pdfreader.urls')),
+
+
+ask interviwer to give command "docker compose up --build"
